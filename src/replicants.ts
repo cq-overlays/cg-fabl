@@ -1,4 +1,4 @@
-import { useEffect, useState } from "preact/compat"
+import { useEffect, useState } from "react"
 
 export const useCurrentBlock = () =>
   useReplicant("cq-dashboard.currentBlock", {
@@ -99,10 +99,5 @@ export const useReplicant = <T, U>(
     }
   }, [replicant])
 
-  return [
-    value,
-    (newValue) => {
-      replicant.value = newValue
-    },
-  ]
+  return value
 }

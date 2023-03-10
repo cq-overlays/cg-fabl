@@ -3,16 +3,22 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["DM Sans", "ui-sans-serif"],
-        mono: ["DM Mono", "ui-monospace"],
+        sans: ["Figtree", "ui-sans-serif"],
+        mono: ["Space Mono", "ui-monospace"],
       },
       colors: {
-        otd: {
-          slate: "#5D9194",
-          blue: "#1ABFC7",
-          green: "#39FA96",
-          pink: "#FB788B",
-          purple: "#C71A8A",
+        fabl: {
+          gold: "#FFD628",
+          pink: {
+            DEFAULT: "#FF298F",
+            dark: "#E20084",
+          },
+          indigo: {
+            DEFAULT: "#490089",
+            light: "#7F36E8",
+            dark: "#3B0970",
+            darker: "#2a0050",
+          },
         },
       },
     },
