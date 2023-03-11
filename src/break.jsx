@@ -131,7 +131,7 @@ const Main = () => {
               <>
                 <Section
                   className={clsx(
-                    "flex-1 h-full w-[36rem] flex flex-col justify-between text-4xl",
+                    "flex-1 h-full !w-[36rem] flex flex-col justify-between text-4xl",
                     "items-start"
                   )}
                 >
@@ -147,7 +147,7 @@ const Main = () => {
                 </motion.div>
                 <Section
                   className={clsx(
-                    "flex-1 h-full w-[36rem] flex flex-col justify-between text-4xl",
+                    "flex-1 h-full !w-[36rem] flex flex-col justify-between text-4xl",
                     "items-end"
                   )}
                 >
