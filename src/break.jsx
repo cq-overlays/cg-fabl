@@ -9,6 +9,7 @@ import {
   useCurrentBlock,
   useCurrentBreakScreen,
   useCurrentFlavorText,
+  useCurrentMapWinners,
   useCurrentRound,
   useCurrentScores,
   useCurrentTeams,
@@ -60,6 +61,8 @@ const Main = () => {
   const round = useCurrentRound()
   const teams = useCurrentTeams()
   const scores = useCurrentScores()
+  const mapWinners = useCurrentMapWinners()
+
   return (
     <div className="absolute inset-0 text-white flex flex-col items-center justify-evenly z-10">
       <LayoutGroup>
@@ -109,16 +112,29 @@ const Main = () => {
             {screen === "maplist" &&
               round.value.map((game, i) => (
                 <Section className="!w-60 h-full flex items-stretch rounded-xl !p-4 gap-4 flex-col">
-                  <div
-                    className="flex-1 rounded-lg bg-cover bg-center bg-fabl-indigo-light flex items-center justify-center"
-                    style={{
-                      backgroundImage: `url('https://sendou.ink/static-assets/img/stages/${maps.indexOf(
-                        game.map
-                      )}.png')`,
-                    }}
-                  >
+                  <div className="relative flex-1 rounded-lg bg-fabl-indigo-light flex items-center justify-center">
+                    <motion.div
+                      animate={{
+                        filter: mapWinners?.[i]
+                          ? "grayscale(75%) brightness(25%)"
+                          : "grayscale(0) brightness(100%)",
+                      }}
+                      className="absolute inset-0 rounded-lg bg-cover bg-center"
+                      style={{
+                        backgroundImage: `url('https://sendou.ink/static-assets/img/stages/${maps.indexOf(
+                          game.map
+                        )}.png')`,
+                      }}
+                    />
                     {maps.indexOf(game.map) === -1 && (
                       <span className="text-9xl font-bold">?</span>
+                    )}
+                    {mapWinners?.[i] && (
+                      <div className="absolute inset-0 flex items-center justify-center p-8 text-center text-4xl font-medium">
+                        <AnimatedText key={mapWinners[i]}>
+                          {mapWinners[i]}
+                        </AnimatedText>
+                      </div>
                     )}
                   </div>
                   <div className="rounded-xl text-3xl h-28">
