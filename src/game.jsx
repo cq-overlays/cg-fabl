@@ -36,10 +36,7 @@ const Scoreboard = () => {
 
 const Score = ({ team, score, color }) => (
   <div className="flex items-center w-full gap-4 font-medium">
-    <div
-      className="rounded-md h-10 w-6 border-2 border-fabl-indigo-light"
-      style={{ backgroundColor: color }}
-    />
+    <div className="rounded-md h-10 w-6" style={{ backgroundColor: color }} />
     <div className="mr-auto">{team}</div>
     <div className="font-bold text-center">
       <div className="flex justify-center w-6 text-3xl">{score}</div>
