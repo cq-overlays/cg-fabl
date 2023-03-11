@@ -21,15 +21,15 @@ function App() {
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-fabl-indigo-dark">
       <Main />
-      {/* <motion.div
-        initial={{ translateX: -398 * 3, translateY: -450 * 1 }}
+      <motion.div
+        initial={{ translateX: -398 * 3, translateY: -300 * 1 }}
         animate={{ translateX: 0, translateY: 0 }}
         transition={{ ease: "linear", duration: 40, repeat: Infinity }}
         className="absolute inset-0 pointer-events-none opacity-[10%] bg-fabl-indigo-dark w-[400vw] h-[400vw]"
         style={{
           backgroundImage: `url('${fablBg}')`,
         }}
-      /> */}
+      />
     </div>
   )
 }
@@ -65,10 +65,9 @@ const Main = () => {
             )
           }
         />
-        {/* <AnimatePresence mode="wait"> */}
         {screen === "brb" ? (
           <motion.div
-            key={screen}
+            key="brb"
             layout
             initial={{ translateX: -20, opacity: 0 }}
             animate={{ translateX: 0, opacity: 1 }}
@@ -82,7 +81,7 @@ const Main = () => {
           </motion.div>
         ) : (
           <motion.div
-            key={screen}
+            key="rest-brb"
             layout
             initial={{ translateX: -20, opacity: 0 }}
             animate={{ translateX: 0, opacity: 1 }}
@@ -163,21 +162,25 @@ const Main = () => {
             <BottomSection comms={<BottomComms block={block} />} />
           </motion.div>
         )}
-        {/* </AnimatePresence> */}
       </LayoutGroup>
     </div>
   )
 }
 
 const BottomSection = ({ comms }) => (
-  <Section className="h-36 max-w-8xl flex items-center gap-8 text-3xl">
+  <Section
+    initial={{ y: 20, opacity: 0 }}
+    animate={{ y: 0, opacity: 1 }}
+    exit={{ y: 20, opacity: 0 }}
+    className="h-36 max-w-8xl flex items-center gap-8 text-3xl"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="h-16 w-16 -mx-2 text-fabl-indigo-light"
+      className="h-16 w-16 text-fabl-indigo-light"
     >
       <path
         strokeLinecap="round"
@@ -187,10 +190,6 @@ const BottomSection = ({ comms }) => (
     </svg>
     <div className="flex flex-col gap-3">{comms}</div>
     <div className="mx-auto" />
-    {/* <div className="flex flex-col justify-between items-end">
-        <div className="text-5xl font-bold text-fabl-gold">Currently on</div>
-        <div className="text-4xl font-medium">Round 2</div>
-      </div> */}
     <img src={fablText} className="h-full" />
   </Section>
 )
@@ -223,7 +222,7 @@ const Member = ({ right, member }) => (
 const HeadingSection = ({ left, right }) => {
   return (
     <Section
-      className="h-36 max-w-8xl flex items-center justify-center gap-8 !p-0"
+      className="h-36 max-w-8xl flex items-center justify-center gap-8 py-0"
       layout
     >
       <AnimatePresence mode="wait">{left}</AnimatePresence>
@@ -259,11 +258,11 @@ const Score = ({ name, score, reverse }) => (
     animate={{ opacity: 1 }}
     exit={{ opacity: 0 }}
     className={clsx(
-      "flex gap-8 flex-1 w-full text-5xl justify-end items-center",
+      "flex gap-8 flex-1 w-full text-5xl justify-between items-center",
       reverse && "flex-row-reverse"
     )}
   >
-    <div className="text-4xl font-medium uppercase tracking-wide">
+    <div className="text-5xl font-semibold">
       <AnimatedText>{name}</AnimatedText>
     </div>
     <div className="text-5xl font-bold w-8 flex justify-center">
