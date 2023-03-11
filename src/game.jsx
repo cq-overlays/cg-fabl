@@ -1,6 +1,7 @@
 import render from "./render"
 import { AnimatePresence, motion } from "framer-motion"
 import clsx from "clsx"
+import fablLogo from "./FABL_IconLogo.png"
 import {
   useCurrentBlock,
   useCurrentColors,
@@ -52,7 +53,23 @@ const Score = ({ team, score, color }) => (
 const CurrentRound = () => {
   const round = useCurrentRound()
   return (
-    <Section className="font-medium text-center -mt-4">{round.name}</Section>
+    <Section className="font-medium text-center -mt-4 relative">
+      {round.name}
+      <motion.div
+        transition={{
+          type: "spring",
+          velocity: 2,
+        }}
+        initial={{ scale: 0, opacity: 0, "--rotate": "6deg" }}
+        animate={{ scale: 1, opacity: 1, "--rotate": "-6deg" }}
+        className="absolute inset-y-0 left-0"
+      >
+        <img
+          src={fablLogo}
+          className="h-16 -translate-x-5 -translate-y-6 rotate-[var(--rotate)]"
+        />
+      </motion.div>
+    </Section>
   )
 }
 
@@ -72,9 +89,34 @@ const BlockSection = () => {
         repeatDelay: cycle[1],
       }}
     >
-      <Section className="flex flex-col gap-4">
+      <Section className="relative flex flex-col gap-4">
         <Comm comm={block.value[0]} />
         <Comm comm={block.value[1]} />
+        <motion.div
+          transition={{
+            type: "spring",
+            velocity: 2,
+            delay: 0.1,
+          }}
+          initial={{ scale: 0, opacity: 0, "--rotate": "-6deg" }}
+          animate={{ scale: 1, opacity: 1, "--rotate": "6deg" }}
+          className="absolute bottom-0 right-0"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="h-16 translate-y-3 translate-x-6 rotate-[var(--rotate)] text-fabl-indigo-light"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"
+            />
+          </svg>
+        </motion.div>
       </Section>
     </motion.div>
   )
@@ -95,6 +137,10 @@ const Section = forwardRef(({ className, children }, ref) => (
   <motion.div
     ref={ref}
     layout="position"
+    transition={{
+      type: "spring",
+      duration: 0.2,
+    }}
     initial={{ x: -20, opacity: 0 }}
     animate={{ x: 0, opacity: 1 }}
     exit={{ x: -20, opacity: 0 }}
