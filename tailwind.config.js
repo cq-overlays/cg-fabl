@@ -6,6 +6,9 @@ module.exports = {
         sans: ["Figtree", "ui-sans-serif"],
         mono: ["Space Mono", "ui-monospace"],
       },
+      maxWidth: {
+        "8xl": "1440px",
+      },
       colors: {
         fabl: {
           gold: "#FFD628",
