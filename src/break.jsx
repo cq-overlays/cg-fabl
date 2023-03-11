@@ -19,10 +19,19 @@ import { maps } from "./utils"
 import { forwardRef, useEffect, useState } from "react"
 
 const animateContainer = {
-  hidden: { x: -20, opacity: 0 },
+  hidden: {
+    x: -20,
+    opacity: 0,
+    transition: {
+      staggerChildren: 0.2,
+    },
+  },
   show: {
     x: 0,
     opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
   },
 }
 
@@ -89,11 +98,11 @@ const Main = () => {
         />
         {screen === "brb" ? (
           <motion.div
-            key="brb"
-            layout="position"
-            initial={{ translateX: -20, opacity: 0 }}
-            animate={{ translateX: 0, opacity: 1 }}
-            exit={{ translateX: 20, opacity: 0 }}
+            variants={animateContainer}
+            key={screen}
+            initial="hidden"
+            animate="show"
+            exit="hidden"
             className="flex flex-col gap-8 w-full items-center"
           >
             <BreakSections
@@ -104,6 +113,7 @@ const Main = () => {
         ) : (
           <motion.div
             variants={animateContainer}
+            key={screen}
             initial="hidden"
             animate="show"
             exit="hidden"
@@ -131,9 +141,7 @@ const Main = () => {
                     )}
                     {mapWinners?.[i] && (
                       <div className="absolute inset-0 flex items-center justify-center p-8 text-center text-4xl font-medium">
-                        <AnimatedText key={mapWinners[i]}>
-                          {mapWinners[i]}
-                        </AnimatedText>
+                        <FadeText key={mapWinners[i]}>{mapWinners[i]}</FadeText>
                       </div>
                     )}
                   </div>
@@ -213,11 +221,17 @@ const BottomSection = ({ comms }) => (
 const BottomComms = ({ block }) =>
   block.value.map((comm) => (
     <div className="flex items-center gap-4">
-      <div className="text-4xl font-medium">{comm.name}</div>
+      <div className="text-4xl font-medium">
+        <FadeText>{comm.name}</FadeText>
+      </div>
       <div className="self-stretch shrink-0 rounded-full w-1 bg-fabl-indigo-light"></div>
-      <div className="text-fabl-pink font-semibold">{comm.pronouns}</div>
+      <div className="text-fabl-pink font-semibold">
+        <FadeText>{comm.pronouns}</FadeText>
+      </div>
       <div className="self-stretch shrink-0 rounded-full w-1 bg-fabl-indigo-light"></div>
-      <div>{comm.twitter}</div>
+      <div>
+        <FadeText>{comm.twitter}</FadeText>
+      </div>
     </div>
   ))
 
@@ -279,15 +293,15 @@ const Score = ({ name, score, reverse }) => (
     )}
   >
     <div className="text-5xl font-semibold">
-      <AnimatedText>{name}</AnimatedText>
+      <FadeText>{name}</FadeText>
     </div>
     <div className="text-5xl font-bold w-8 flex justify-center">
-      <AnimatedText>{score}</AnimatedText>
+      <FadeText>{score}</FadeText>
     </div>
   </motion.div>
 )
 
-const AnimatedText = ({ children }) => (
+const FadeText = ({ children }) => (
   <AnimatePresence mode="wait">
     <motion.span
       key={children}
@@ -321,7 +335,7 @@ const FlavorText = ({ text }) => {
               exit={{ opacity: 0 }}
               className="text-5xl font-semibold"
             >
-              <AnimatedText>{main}</AnimatedText>
+              <FadeText>{main}</FadeText>
             </motion.div>
           )}
           {sub && (
@@ -333,7 +347,7 @@ const FlavorText = ({ text }) => {
               exit={{ opacity: 0 }}
               className="text-3xl"
             >
-              <AnimatedText>{sub}</AnimatedText>
+              <FadeText>{sub}</FadeText>
             </motion.div>
           )}
         </AnimatePresence>
@@ -469,7 +483,7 @@ const Commentator = ({ left, right, comm }) => (
     )}
   >
     <div className="text-4xl font-medium">
-      <AnimatedText>{comm.name}</AnimatedText>
+      <FadeText>{comm.name}</FadeText>
     </div>
     <div
       className={clsx(
@@ -478,11 +492,11 @@ const Commentator = ({ left, right, comm }) => (
       )}
     >
       <div>
-        <AnimatedText>{comm.twitter}</AnimatedText>
+        <FadeText>{comm.twitter}</FadeText>
       </div>
       <div className="self-stretch shrink-0 rounded-full w-1 bg-fabl-indigo-light"></div>
       <div className="text-fabl-pink font-semibold">
-        <AnimatedText>{comm.pronouns}</AnimatedText>
+        <FadeText>{comm.pronouns}</FadeText>
       </div>
     </div>
   </div>
