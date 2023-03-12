@@ -140,7 +140,7 @@ const Main = () => {
                       <span className="text-9xl font-bold">?</span>
                     )}
                     {mapWinners?.[i] && (
-                      <div className="absolute inset-0 flex items-center justify-center p-8 text-center text-4xl font-medium">
+                      <div className="absolute inset-0 flex items-center justify-center p-4 text-center text-4xl font-medium">
                         <FadeText key={mapWinners[i]}>{mapWinners[i]}</FadeText>
                       </div>
                     )}
