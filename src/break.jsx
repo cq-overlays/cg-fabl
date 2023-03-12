@@ -74,125 +74,121 @@ const Main = () => {
 
   return (
     <div className="absolute inset-0 text-white flex flex-col items-center justify-evenly z-10">
-      <LayoutGroup>
-        <HeadingSection
-          left={
-            screen === "brb" ? (
-              <Title key="brb" />
-            ) : (
-              <Score key="!brb" name={teams[0].name} score={scores[0]} />
-            )
-          }
-          right={
-            screen === "brb" ? (
-              <FlavorText key="brb" text={text} />
-            ) : (
-              <Score
-                key="!brb"
-                name={teams[1].name}
-                score={scores[1]}
-                reverse
-              />
-            )
-          }
-        />
-        {screen === "brb" ? (
-          <motion.div
-            variants={animateContainer}
-            key={screen}
-            initial="hidden"
-            animate="show"
-            exit="hidden"
-            className="flex flex-col gap-8 w-full items-center"
-          >
-            <BreakSections
-              left={<Commentator left comm={block.value[0]} />}
-              right={<Commentator right comm={block.value[1]} />}
-            />
-          </motion.div>
-        ) : (
-          <motion.div
-            variants={animateContainer}
-            key={screen}
-            initial="hidden"
-            animate="show"
-            exit="hidden"
-            className="flex items-center justify-center h-[36rem] gap-8 p-12"
-          >
-            {screen === "maplist" &&
-              round.value.map((game, i) => (
-                <Section className="!w-60 h-full flex items-stretch rounded-xl !p-4 gap-4 flex-col">
-                  <div className="relative flex-1 rounded-lg bg-fabl-indigo-light flex items-center justify-center">
-                    <motion.div
-                      animate={{
-                        filter: mapWinners?.[i]
-                          ? "grayscale(75%) brightness(25%)"
-                          : "grayscale(0) brightness(100%)",
-                      }}
-                      className="absolute inset-0 rounded-lg bg-cover bg-center"
-                      style={{
-                        backgroundImage: `url('https://sendou.ink/static-assets/img/stages/${maps.indexOf(
-                          game.map
-                        )}.png')`,
-                      }}
-                    />
-                    {maps.indexOf(game.map) === -1 && (
-                      <span className="text-9xl font-bold">?</span>
-                    )}
-                    {mapWinners?.[i] && (
-                      <div className="absolute inset-0 flex items-center justify-center p-4 text-center text-4xl font-medium">
-                        <FadeText key={mapWinners[i]}>{mapWinners[i]}</FadeText>
-                      </div>
-                    )}
-                  </div>
-                  <div className="rounded-xl text-3xl h-28">
-                    <div className="font-semibold">{game.mode}</div>
-                    <div>{game.map}</div>
-                  </div>
-                </Section>
-              ))}
-            {screen === "rosters" && (
-              <>
-                <Section
-                  className={clsx(
-                    "flex-1 h-full !w-[36rem] flex flex-col justify-between text-4xl",
-                    "items-start"
+      <HeadingSection
+        left={
+          screen === "brb" ? (
+            <Title key="brb" />
+          ) : (
+            <Score key="!brb" name={teams[0].name} score={scores[0]} />
+          )
+        }
+        right={
+          screen === "brb" ? (
+            <FlavorText key="brb" text={text} />
+          ) : (
+            <Score key="!brb" name={teams[1].name} score={scores[1]} reverse />
+          )
+        }
+      />
+      {screen === "brb" ? (
+        <motion.div
+          variants={animateContainer}
+          key={screen}
+          initial="hidden"
+          animate="show"
+          exit="hidden"
+          className="flex flex-col gap-8 w-full items-center"
+        >
+          <BreakSections
+            left={<Commentator left comm={block.value[0]} />}
+            right={<Commentator right comm={block.value[1]} />}
+          />
+        </motion.div>
+      ) : (
+        <motion.div
+          variants={animateContainer}
+          key={screen}
+          initial="hidden"
+          animate="show"
+          exit="hidden"
+          className="flex items-center justify-center h-[36rem] gap-8 p-12"
+        >
+          {screen === "maplist" &&
+            round.value.map((game, i) => (
+              <Section className="!w-60 h-full flex items-stretch rounded-xl !p-4 gap-4 flex-col">
+                <div className="relative flex-1 rounded-lg bg-fabl-indigo-light flex items-center justify-center">
+                  <motion.div
+                    animate={{
+                      filter: mapWinners?.[i]
+                        ? "grayscale(75%) brightness(25%)"
+                        : "grayscale(0) brightness(100%)",
+                    }}
+                    className="absolute inset-0 rounded-lg bg-cover bg-center"
+                    style={{
+                      backgroundImage: `url('https://sendou.ink/static-assets/img/stages/${maps.indexOf(
+                        game.map
+                      )}.png')`,
+                    }}
+                  />
+                  {maps.indexOf(game.map) === -1 && (
+                    <span className="text-9xl font-bold">?</span>
                   )}
-                >
-                  {teams[0].data?.map((member) => (
-                    <Member member={member} />
-                  ))}
-                </Section>
-                <motion.div
-                  variants={animateSection}
-                  className="text-8xl text-fabl-pink font-bold"
-                >
-                  VS
-                </motion.div>
-                <Section
-                  className={clsx(
-                    "flex-1 h-full !w-[36rem] flex flex-col justify-between text-4xl",
-                    "items-end"
+                  {mapWinners?.[i] && (
+                    <div className="absolute inset-0 flex items-center justify-center p-4 text-center text-4xl font-medium">
+                      <FadeText key={mapWinners[i]}>{mapWinners[i]}</FadeText>
+                    </div>
                   )}
-                >
-                  {teams[1].data?.map((member) => (
-                    <Member member={member} right />
-                  ))}
-                </Section>
-              </>
-            )}
-          </motion.div>
-        )}
+                </div>
+                <div className="rounded-xl text-3xl h-28">
+                  <div className="font-semibold">{game.mode}</div>
+                  <div>{game.map}</div>
+                </div>
+              </Section>
+            ))}
+          {screen === "rosters" && (
+            <>
+              <Section
+                className={clsx(
+                  "flex-1 h-full !w-[36rem] flex flex-col justify-between text-4xl",
+                  "items-start"
+                )}
+              >
+                {teams[0].data?.map((member) => (
+                  <Member member={member} />
+                ))}
+              </Section>
+              <motion.div
+                variants={animateSection}
+                className="text-8xl text-fabl-pink font-bold"
+              >
+                VS
+              </motion.div>
+              <Section
+                className={clsx(
+                  "flex-1 h-full !w-[36rem] flex flex-col justify-between text-4xl",
+                  "items-end"
+                )}
+              >
+                {teams[1].data?.map((member) => (
+                  <Member member={member} right />
+                ))}
+              </Section>
+            </>
+          )}
+        </motion.div>
+      )}
+      <AnimatePresence mode="popLayout">
         {screen !== "brb" && (
           <BottomSection comms={<BottomComms block={block} />} />
         )}
-      </LayoutGroup>
+      </AnimatePresence>
     </div>
   )
 }
 
-const BottomSection = ({ comms }) => (
+const BottomSection = forwardRef(({ comms }, ref) => (
   <Section
+    ref={ref}
     initial={{ y: 20, opacity: 0 }}
     animate={{ y: 0, opacity: 1 }}
     exit={{ y: 20, opacity: 0 }}
@@ -216,7 +212,7 @@ const BottomSection = ({ comms }) => (
     <div className="mx-auto" />
     <img src={fablText} className="h-full" />
   </Section>
-)
+))
 
 const BottomComms = ({ block }) =>
   block.value.map((comm) => (
@@ -318,34 +314,32 @@ const FlavorText = ({ text }) => {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
     >
-      <LayoutGroup>
-        <AnimatePresence mode="popLayout">
-          {main && (
-            <motion.div
-              key="main"
-              layout="position"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-5xl font-semibold"
-            >
-              <FadeText>{main}</FadeText>
-            </motion.div>
-          )}
-          {sub && (
-            <motion.div
-              key="sub"
-              layout="position"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-3xl"
-            >
-              <FadeText>{sub}</FadeText>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </LayoutGroup>
+      <AnimatePresence mode="popLayout">
+        {main && (
+          <motion.div
+            key="main"
+            layout="position"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="text-5xl font-semibold"
+          >
+            <FadeText>{main}</FadeText>
+          </motion.div>
+        )}
+        {sub && (
+          <motion.div
+            key="sub"
+            layout="position"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="text-3xl"
+          >
+            <FadeText>{sub}</FadeText>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }
