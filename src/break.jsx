@@ -221,17 +221,11 @@ const BottomSection = ({ comms }) => (
 const BottomComms = ({ block }) =>
   block.value.map((comm) => (
     <div className="flex items-center gap-4">
-      <div className="text-4xl font-medium">
-        <FadeText>{comm.name}</FadeText>
-      </div>
+      <div className="text-4xl font-medium">{comm.name}</div>
       <div className="self-stretch shrink-0 rounded-full w-1 bg-fabl-indigo-light"></div>
-      <div className="text-fabl-pink font-semibold">
-        <FadeText>{comm.pronouns}</FadeText>
-      </div>
+      <div className="text-fabl-pink font-semibold">{comm.pronouns}</div>
       <div className="self-stretch shrink-0 rounded-full w-1 bg-fabl-indigo-light"></div>
-      <div>
-        <FadeText>{comm.twitter}</FadeText>
-      </div>
+      <div>{comm.twitter}</div>
     </div>
   ))
 
