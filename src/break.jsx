@@ -79,21 +79,53 @@ const Main = () => {
     <div className="absolute inset-0 text-white flex flex-col items-center justify-evenly z-10">
       <HeadingSection
         left={
-          screen === "brb" ? (
-            <Title key="brb" />
+          screen === "brb" || screen.startsWith("leaderboard") ? (
+            <motion.div
+              key={"brb" + screen}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col gap-3 flex-1 items-end min-w-0"
+            >
+              {screen.startsWith("leaderboard") ? (
+                <>
+                  <div className="inline-flex items-center text-5xl font-semibold">
+                    Current Standings
+                  </div>
+                  <div className="text-3xl">
+                    <span className="text-fabl-pink font-semibold">
+                      fabl.otd.ink/standings
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="inline-flex items-center text-5xl font-semibold">
+                    <span className="leading-none">Welcome to</span>
+                    <img src={fablText} className="ml-3 h-12" />
+                  </div>
+                  <div className="text-3xl">
+                    Learn more at{" "}
+                    <span className="text-fabl-pink font-semibold">
+                      fabl.otd.ink
+                    </span>
+                  </div>
+                </>
+              )}
+            </motion.div>
           ) : (
             <Score key="!brb" name={teams[0].name} score={scores[0]} />
           )
         }
         right={
-          screen === "brb" ? (
+          screen === "brb" || screen.startsWith("leaderboard") ? (
             <FlavorText key="brb" text={text} />
           ) : (
             <Score key="!brb" name={teams[1].name} score={scores[1]} reverse />
           )
         }
       />
-      {screen === "brb" ? (
+      {screen === "brb" || screen.startsWith("leaderboard") ? (
         <motion.div
           variants={animateContainer}
           key={screen}
@@ -102,10 +134,52 @@ const Main = () => {
           exit="hidden"
           className="flex flex-col gap-8 w-full items-center"
         >
-          <BreakSections
-            left={<Commentator left comm={block.value[0]} />}
-            right={<Commentator right comm={block.value[1]} />}
-          />
+          {screen.startsWith("leaderboard") ? (
+            <div className="flex items-center justify-center h-[36rem] w-full gap-8 p-12">
+              {data && (
+                <>
+                  <Section
+                    key={"l" + screen}
+                    className={clsx(
+                      "flex-1 h-full max-w-2xl flex flex-col justify-between text-4xl"
+                    )}
+                  >
+                    {data.slice(0 + page * 10, 5 + page * 10).map((v, i) => (
+                      <Row
+                        placement={i + 1 + page * 10}
+                        key={i}
+                        weapons={v.weapons}
+                        name={v.splashtag.substring(0, v.splashtag.length - 5)}
+                        points={v.points}
+                      />
+                    ))}
+                  </Section>
+                  <span />
+                  <Section
+                    key={"l" + screen}
+                    className={clsx(
+                      "flex-1 h-full max-w-2xl flex flex-col justify-between text-4xl"
+                    )}
+                  >
+                    {data.slice(5 + page * 10, 10 + page * 10).map((v, i) => (
+                      <Row
+                        placement={i + 6 + page * 10}
+                        key={i}
+                        weapons={v.weapons}
+                        name={v.splashtag.substring(0, v.splashtag.length - 5)}
+                        points={v.points}
+                      />
+                    ))}
+                  </Section>
+                </>
+              )}
+            </div>
+          ) : (
+            <BreakSections
+              left={<Commentator left comm={block.value[0]} />}
+              right={<Commentator right comm={block.value[1]} />}
+            />
+          )}
         </motion.div>
       ) : (
         <motion.div
@@ -178,47 +252,10 @@ const Main = () => {
               </Section>
             </>
           )}
-          {screen.startsWith("leaderboard") && data && (
-            <>
-              <Section
-                key={"l" + screen}
-                className={clsx(
-                  "flex-1 h-full max-w-2xl flex flex-col justify-between text-4xl"
-                )}
-              >
-                {data.slice(0 + page * 10, 5 + page * 10).map((v, i) => (
-                  <Row
-                    placement={i + 1 + page * 10}
-                    key={i}
-                    weapons={v.weapons}
-                    name={v.splashtag}
-                    points={v.points}
-                  />
-                ))}
-              </Section>
-              <span />
-              <Section
-                key={"l" + screen}
-                className={clsx(
-                  "flex-1 h-full max-w-2xl flex flex-col justify-between text-4xl"
-                )}
-              >
-                {data.slice(5 + page * 10, 10 + page * 10).map((v, i) => (
-                  <Row
-                    placement={i + 6 + page * 10}
-                    key={i}
-                    weapons={v.weapons}
-                    name={v.splashtag}
-                    points={v.points}
-                  />
-                ))}
-              </Section>
-            </>
-          )}
         </motion.div>
       )}
       <AnimatePresence mode="popLayout">
-        {screen !== "brb" && (
+        {screen !== "brb" && !screen.startsWith("leaderboard") && (
           <BottomSection comms={<BottomComms block={block} />} />
         )}
       </AnimatePresence>
@@ -274,13 +311,20 @@ const BottomComms = ({ block }) =>
   ))
 
 const Member = ({ right, member }) => (
-  <div className={clsx("flex flex-col", right ? "items-end" : "items-start")}>
-    <div className="font-medium">{member.splashtag}</div>
+  <div
+    className={clsx(
+      "flex items-center w-full justify-between",
+      right ? "flex-row-reverse" : "flex-row"
+    )}
+  >
+    <div className="font-medium">
+      {member.splashtag.substring(0, member.splashtag.length - 5)}
+    </div>
     <div className="flex gap-2">
       {member.weapons.map((weapon) => (
         <img
           src={`https://raw.githubusercontent.com/Sendouc/sendou.ink/rewrite/public/static-assets/img/main-weapons-outlined/${weapon.id}.png`}
-          className="h-12"
+          className="h-14"
         />
       ))}
     </div>
@@ -301,24 +345,6 @@ const HeadingSection = ({ left, right }) => {
     </Section>
   )
 }
-
-const Title = () => (
-  <motion.div
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    className="flex flex-col gap-3 flex-1 items-end min-w-0"
-  >
-    <div className="inline-flex items-center text-5xl font-semibold">
-      <span className="leading-none">Welcome to</span>
-      <img src={fablText} className="ml-3 h-12" />
-    </div>
-    <div className="text-3xl">
-      Learn more at{" "}
-      <span className="text-fabl-pink font-semibold">fabl.otd.ink</span>
-    </div>
-  </motion.div>
-)
 
 const Score = ({ name, score, reverse }) => (
   <motion.div
@@ -559,7 +585,7 @@ const Row = ({ placement, name, weapons, points }) => {
             <img
               key={weapon.id}
               src={`https://raw.githubusercontent.com/Sendouc/sendou.ink/rewrite/public/static-assets/img/main-weapons-outlined/${weapon.id}.png`}
-              className="h-12 shrink-0"
+              className="h-14 shrink-0"
             />
           ))}
         </div>
