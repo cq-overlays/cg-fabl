@@ -73,6 +73,7 @@ const Main = () => {
   const mapWinners = useCurrentMapWinners()
   const data = useLeaderboard()
   const { maps } = useLoadedData()
+  const page = getPage(screen)
 
   return (
     <div className="absolute inset-0 text-white flex flex-col items-center justify-evenly z-10">
@@ -177,16 +178,17 @@ const Main = () => {
               </Section>
             </>
           )}
-          {screen === "leaderboard" && data && (
+          {screen.startsWith("leaderboard") && data && (
             <>
               <Section
+                key={"l" + screen}
                 className={clsx(
                   "flex-1 h-full max-w-2xl flex flex-col justify-between text-4xl"
                 )}
               >
-                {data.slice(0, 5).map((v, i) => (
+                {data.slice(0 + page * 10, 5 + page * 10).map((v, i) => (
                   <Row
-                    placement={i + 1}
+                    placement={i + 1 + page * 10}
                     key={i}
                     weapons={v.weapons}
                     name={v.splashtag}
@@ -196,13 +198,14 @@ const Main = () => {
               </Section>
               <span />
               <Section
+                key={"l" + screen}
                 className={clsx(
                   "flex-1 h-full max-w-2xl flex flex-col justify-between text-4xl"
                 )}
               >
-                {data.slice(5, 10).map((v, i) => (
+                {data.slice(5 + page * 10, 10 + page * 10).map((v, i) => (
                   <Row
-                    placement={i + 6}
+                    placement={i + 6 + page * 10}
                     key={i}
                     weapons={v.weapons}
                     name={v.splashtag}
@@ -221,6 +224,14 @@ const Main = () => {
       </AnimatePresence>
     </div>
   )
+}
+
+const getPage = (screen) => {
+  let page = 0
+  if (parseInt(screen.charAt(screen.length - 1)) > 0) {
+    page = parseInt(screen.charAt(screen.length - 1)) - 1
+  }
+  return page
 }
 
 const BottomSection = forwardRef(({ comms }, ref) => (
