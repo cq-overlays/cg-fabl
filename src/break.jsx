@@ -71,6 +71,7 @@ const Main = () => {
   const teams = useCurrentTeams()
   const scores = useCurrentScores()
   const mapWinners = useCurrentMapWinners()
+  const data = useLeaderboard()
 
   return (
     <div className="absolute inset-0 text-white flex flex-col items-center justify-evenly z-10">
@@ -111,7 +112,7 @@ const Main = () => {
           initial="hidden"
           animate="show"
           exit="hidden"
-          className="flex items-center justify-center h-[36rem] gap-8 p-12"
+          className="flex items-center justify-center h-[36rem] w-full gap-8 p-12"
         >
           {screen === "maplist" &&
             round.value.map((game, i) => (
@@ -149,7 +150,7 @@ const Main = () => {
             <>
               <Section
                 className={clsx(
-                  "flex-1 h-full !w-[36rem] flex flex-col justify-between text-4xl",
+                  "flex-1 h-full max-w-xl w-full flex flex-col justify-between text-4xl",
                   "items-start"
                 )}
               >
@@ -165,12 +166,47 @@ const Main = () => {
               </motion.div>
               <Section
                 className={clsx(
-                  "flex-1 h-full !w-[36rem] flex flex-col justify-between text-4xl",
+                  "flex-1 h-full max-w-xl w-full flex flex-col justify-between text-4xl",
                   "items-end"
                 )}
               >
                 {teams[1].data?.map((member) => (
                   <Member member={member} right />
+                ))}
+              </Section>
+            </>
+          )}
+          {screen === "leaderboard" && data && (
+            <>
+              <Section
+                className={clsx(
+                  "flex-1 h-full max-w-2xl flex flex-col justify-between text-4xl"
+                )}
+              >
+                {data.slice(0, 5).map((v, i) => (
+                  <Row
+                    placement={i + 1}
+                    key={i}
+                    weapons={v.weapons}
+                    name={v.splashtag}
+                    points={v.points}
+                  />
+                ))}
+              </Section>
+              <span />
+              <Section
+                className={clsx(
+                  "flex-1 h-full max-w-2xl flex flex-col justify-between text-4xl"
+                )}
+              >
+                {data.slice(5, 10).map((v, i) => (
+                  <Row
+                    placement={i + 6}
+                    key={i}
+                    weapons={v.weapons}
+                    name={v.splashtag}
+                    points={v.points}
+                  />
                 ))}
               </Section>
             </>
@@ -490,80 +526,11 @@ const Commentator = ({ left, right, comm }) => (
   </div>
 )
 
-const LeaderboardSection = () => {
-  const data = useLeaderboard()
-  if (data === undefined) {
-    return (
-      <div className="w-full flex flex-col gap-3 animate-pulse">
-        {Array.from({ length: 9 }).map((v, i) => (
-          <div key={i} style={{ opacity: `calc(100% - ${(i + 1) * 10}%)` }}>
-            <Row name={`\u200B`} />
-          </div>
-        ))}
-      </div>
-    )
-  }
-  if (data?.message) {
-    return (
-      <div className="w-full flex flex-col gap-3">
-        <div className="max-w-2xl w-full rounded-lg p-5 mx-auto text-xl text-center text-red-400 bg-red-400/20">
-          Something went wrong, try again later.
-        </div>
-      </div>
-    )
-  }
-
-  if (data.length === 0) {
-    return (
-      <div className="w-full flex flex-col gap-3">
-        <Row
-          name={
-            <div className="text-center w-full text-3xl overflow-auto whitespace-normal">
-              Qualifiers have not begun yet, so standings are not avaliable.
-              Check back soon!
-            </div>
-          }
-        />
-        {Array.from({ length: 5 }).map((v, i) => (
-          <div key={i} style={{ opacity: `calc(100% - ${(i + 1) * 10}%)` }}>
-            <Row name={`\u200B`} />
-          </div>
-        ))}
-      </div>
-    )
-  }
+const Row = ({ placement, name, weapons, points }) => {
   return (
-    <div className="w-full flex flex-col gap-3">
-      {data.map((v, i) => (
-        <Row
-          placement={i + 1}
-          key={i}
-          name={
-            <div className="flex items-center gap-3">
-              <span>{v.splashtag}</span>
-              <div className="flex items-center gap-2">
-                {v.weapons.map((weapon) => (
-                  <img
-                    key={weapon.id}
-                    src={`https://raw.githubusercontent.com/Sendouc/sendou.ink/rewrite/public/static-assets/img/main-weapons-outlined/${weapon.id}.png`}
-                    className="h-7 w-7 sm:h-8 sm:w-8"
-                  />
-                ))}
-              </div>
-            </div>
-          }
-          points={v.points}
-        />
-      ))}
-    </div>
-  )
-}
-
-const Row = ({ placement, name, points }) => (
-  <Section className="!p-4 flex items-center text-3xl sm:text-2xl max-w-3xl mx-auto w-full">
-    {placement && (
+    <div className="flex gap-8 items-center text-4xl max-w-3xl mx-auto w-full justify-between">
       <div
-        className={`shrink-0 pr-4 sm:pr-0 sm:w-16 sm:text-center font-black text-fabl-indigo-light ${
+        className={`shrink-0 font-mono text-center text-4xl font-black text-fabl-indigo-light ${
           placement <= 1
             ? "!text-fabl-gold"
             : placement <= 3
@@ -573,23 +540,25 @@ const Row = ({ placement, name, points }) => (
       >
         {placement}
       </div>
-    )}
-    <div
-      className={`flex-1 text-xl gap-4 rounded-md font-medium overflow-hidden py-3 px-4 flex items-center justify-between ${
-        placement % 2 === 0 ? "bg-fabl-indigo-darker" : "bg-fabl-indigo-darker"
-      }`}
-    >
-      <div className="flex-1">{name}</div>
-      {points && (
-        <div className="font-mono shrink-0">
-          <span className="font-bold">{points}</span>{" "}
-          <span className="hidden sm:inline">points</span>
+      <div className="flex-1 truncate flex items-center gap-3">
+        <span>{name}</span>
+        <div className="flex shrink-0 items-center gap-1">
+          {weapons.map((weapon) => (
+            <img
+              key={weapon.id}
+              src={`https://raw.githubusercontent.com/Sendouc/sendou.ink/rewrite/public/static-assets/img/main-weapons-outlined/${weapon.id}.png`}
+              className="h-12 shrink-0"
+            />
+          ))}
         </div>
-      )}
+      </div>
+      <span className="font-bold font-mono">
+        {Object.values(points).reduce((a, b) => a + b, 0)}
+        <span className="font-sans">p</span>
+      </span>
     </div>
-    {placement && <div className="sm:w-16"></div>}
-  </Section>
-)
+  )
+}
 
 const useLeaderboard = () => {
   const [data, setData] = useState()
@@ -598,7 +567,9 @@ const useLeaderboard = () => {
     fetch(
       "https://us-central1-off-the-dial-26e93.cloudfunctions.net/fabl-standings"
     )
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.ok) return res.json()
+      })
       .then((data) => setData(data))
   }, [])
 
