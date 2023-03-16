@@ -13,9 +13,9 @@ import {
   useCurrentRound,
   useCurrentScores,
   useCurrentTeams,
+  useLoadedData,
 } from "./replicants"
-import { AnimatePresence, LayoutGroup, motion } from "framer-motion"
-import { maps } from "./utils"
+import { AnimatePresence, motion } from "framer-motion"
 import { forwardRef, useEffect, useState } from "react"
 
 const animateContainer = {
@@ -72,6 +72,7 @@ const Main = () => {
   const scores = useCurrentScores()
   const mapWinners = useCurrentMapWinners()
   const data = useLeaderboard()
+  const { maps } = useLoadedData()
 
   return (
     <div className="absolute inset-0 text-white flex flex-col items-center justify-evenly z-10">
@@ -126,12 +127,12 @@ const Main = () => {
                     }}
                     className="absolute inset-0 rounded-lg bg-cover bg-center"
                     style={{
-                      backgroundImage: `url('https://sendou.ink/static-assets/img/stages/${maps.indexOf(
-                        game.map
-                      )}.png')`,
+                      backgroundImage: `url('https://sendou.ink/static-assets/img/stages/${
+                        maps.indexOf(game.map) - 1
+                      }.png')`,
                     }}
                   />
-                  {maps.indexOf(game.map) === -1 && (
+                  {maps.indexOf(game.map) - 1 < 0 && (
                     <span className="text-9xl font-bold">?</span>
                   )}
                   {mapWinners?.[i] && (
