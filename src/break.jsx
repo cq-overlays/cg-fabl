@@ -313,14 +313,14 @@ const BottomComms = ({ block }) =>
 const Member = ({ right, member }) => (
   <div
     className={clsx(
-      "flex items-center w-full justify-between",
-      right ? "flex-row-reverse" : "flex-row"
+      "flex items-center w-full justify-between gap-4",
+      right ? "text-right flex-row-reverse" : "text-left flex-row"
     )}
   >
-    <div className="font-medium">
+    <div className="grow font-medium truncate">
       {member.splashtag.substring(0, member.splashtag.length - 5)}
     </div>
-    <div className="flex gap-2">
+    <div className="flex gap-2 shrink-0">
       {member.weapons.map((weapon) => (
         <img
           src={`https://raw.githubusercontent.com/Sendouc/sendou.ink/rewrite/public/static-assets/img/main-weapons-outlined/${weapon.id}.png`}
