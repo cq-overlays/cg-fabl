@@ -54,7 +54,7 @@ function App() {
         initial={{ translateX: -398 * 3, translateY: -300 * 1 }}
         animate={{ translateX: 0, translateY: 0 }}
         transition={{ ease: "linear", duration: 40, repeat: Infinity }}
-        className="absolute inset-0 pointer-events-none opacity-[10%] bg-fabl-indigo-dark w-[400vw] h-[400vw]"
+        className="absolute inset-0 pointer-events-none opacity-[5%] bg-fabl-indigo-dark w-[400vw] h-[400vw]"
         style={{
           backgroundImage: `url('${fablBg}')`,
         }}
