@@ -64,6 +64,7 @@ function App() {
 }
 
 const Main = () => {
+  const { maps } = useLoadedData()
   const screen = useCurrentBreakScreen()
   const block = useCurrentBlock()
   const text = useCurrentFlavorText()
@@ -71,9 +72,8 @@ const Main = () => {
   const teams = useCurrentTeams()
   const scores = useCurrentScores()
   const mapWinners = useCurrentMapWinners()
-  const data = useLeaderboard()
-  const { maps } = useLoadedData()
   const page = getPage(screen)
+  const data = useLeaderboard(screen)
 
   return (
     <div className="absolute inset-0 text-white flex flex-col items-center justify-evenly z-10">
@@ -591,14 +591,14 @@ const Row = ({ placement, name, weapons, points }) => {
         </div>
       </div>
       <span className="font-bold font-mono">
-        {Object.values(points).reduce((a, b) => a + b, 0)}
+        {Object.values(points).reduce((a, b, i) => (i < 3 ? a + b : a), 0)}
         <span className="font-sans">p</span>
       </span>
     </div>
   )
 }
 
-const useLeaderboard = () => {
+const useLeaderboard = (screen) => {
   const [data, setData] = useState()
 
   useEffect(() => {
@@ -609,7 +609,7 @@ const useLeaderboard = () => {
         if (res.ok) return res.json()
       })
       .then((data) => setData(data))
-  }, [])
+  }, [screen])
 
   return data
 }
