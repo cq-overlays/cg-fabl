@@ -12,7 +12,7 @@ import {
 } from "./replicants"
 import { useState, useEffect, forwardRef } from "react"
 
-const cycle = [45, 15]
+const cycle = [50, 10]
 
 function App() {
   const game = useCurrentGameScreen()
