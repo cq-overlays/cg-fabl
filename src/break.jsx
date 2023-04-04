@@ -148,8 +148,8 @@ const Main = () => {
                       <Row
                         placement={i + 1 + page * 10}
                         key={i}
+                        entrant={v}
                         weapons={v.weapons}
-                        name={v.splashtag.substring(0, v.splashtag.length - 5)}
                         points={v.points}
                       />
                     ))}
@@ -162,13 +162,7 @@ const Main = () => {
                     )}
                   >
                     {data.slice(5 + page * 10, 10 + page * 10).map((v, i) => (
-                      <Row
-                        placement={i + 6 + page * 10}
-                        key={i}
-                        weapons={v.weapons}
-                        name={v.splashtag.substring(0, v.splashtag.length - 5)}
-                        points={v.points}
-                      />
+                      <Row placement={i + 6 + page * 10} key={i} entrant={v} />
                     ))}
                   </Section>
                 </>
@@ -564,7 +558,7 @@ const Commentator = ({ left, right, comm }) => (
   </div>
 )
 
-const Row = ({ placement, name, weapons, points }) => {
+const Row = ({ placement, entrant }) => {
   return (
     <div className="flex gap-8 items-center text-4xl max-w-3xl mx-auto w-full justify-between">
       <div
@@ -579,9 +573,11 @@ const Row = ({ placement, name, weapons, points }) => {
         {placement}
       </div>
       <div className="flex-1 truncate flex items-center gap-3">
-        <span>{name}</span>
+        <span>
+          {entrant.splashtag.substring(0, entrant.splashtag.length - 5)}
+        </span>
         <div className="flex shrink-0 items-center gap-1">
-          {weapons.map((weapon) => (
+          {entrant.weapons.map((weapon) => (
             <img
               key={weapon.id}
               src={`https://raw.githubusercontent.com/Sendouc/sendou.ink/rewrite/public/static-assets/img/main-weapons-outlined/${weapon.id}.png`}
@@ -591,7 +587,7 @@ const Row = ({ placement, name, weapons, points }) => {
         </div>
       </div>
       <span className="font-bold font-mono">
-        {Object.values(points).reduce((a, b, i) => (i < 3 ? a + b : a), 0)}
+        {entrant.total}
         <span className="font-sans">p</span>
       </span>
     </div>
