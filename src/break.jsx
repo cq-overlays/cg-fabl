@@ -5,6 +5,11 @@ import fablText from "./FABL_TextLogo.png"
 import fablBg from "./FABL_bg.png"
 import mitLogo from "./mit.webp"
 import otdLogo from "./otd.svg"
+import fablSz from "./fablmode-sz.png"
+import fablTc from "./fablmode-tc.png"
+import fablRm from "./fablmode-rm.png"
+import fablCb from "./fablmode-cb.png"
+import banned from "./banned.png"
 import {
   useCurrentBlock,
   useCurrentBreakScreen,
@@ -13,6 +18,7 @@ import {
   useCurrentRound,
   useCurrentScores,
   useCurrentTeams,
+  useFablFinals,
   useLoadedData,
 } from "./replicants"
 import { AnimatePresence, motion } from "framer-motion"
@@ -72,6 +78,7 @@ const Main = () => {
   const teams = useCurrentTeams()
   const scores = useCurrentScores()
   const mapWinners = useCurrentMapWinners()
+  const finals = useFablFinals()
   const page = getPage(screen)
   const data = useLeaderboard(screen)
 
@@ -216,6 +223,21 @@ const Main = () => {
                 </div>
               </Section>
             ))}
+          {screen === "finals" && (
+            <div className="flex flex-col w-full items-center h-full gap-8">
+              {Array.from({ length: 2 }, (v, i) => i).map((ii) => (
+                <div className="flex flex-1 justify-center w-full gap-8">
+                  {Array.from({ length: 8 }, (v, i) => i).map((i) => (
+                    <FinalsGame
+                      game={finals[i + ii * 8]}
+                      teams={teams}
+                      maps={maps}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+          )}
           {screen === "rosters" && (
             <>
               <Section
@@ -254,6 +276,90 @@ const Main = () => {
         )}
       </AnimatePresence>
     </div>
+  )
+}
+
+const FinalsGame = ({ game, teams, maps }) => {
+  const winner = game.state.startsWith("winner")
+    ? game.state === "winnerA"
+      ? teams[0].name
+      : teams[1].name
+    : null
+  const modeimgSources = {
+    "Splat Zones": fablSz,
+    "Tower Control": fablTc,
+    Rainmaker: fablRm,
+    "Clam Blitz": fablCb,
+  }
+  console.log(game.state)
+  return (
+    <Section className="flex-1 h-full flex items-stretch rounded-xl !p-4 gap-4 flex-col">
+      <div className="relative flex-1 rounded-lg bg-fabl-indigo-light flex items-center justify-center">
+        <div className="absolute z-10 h-full w-full flex items-start justify-start">
+          <motion.div
+            animate={{
+              opacity: game.state === "next" ? 1 : 0,
+              scale: game.state === "next" ? 1 : 0.8,
+            }}
+            style={{ translateY: "-1.75rem", translateX: "-1.75rem" }}
+          >
+            <motion.div
+              animate={{ scale: [1, 1.05, 1] }}
+              transition={{ duration: 0.5, repeat: Infinity, repeatDelay: 0 }}
+            >
+              <motion.div className="bg-fabl-gold/60 brightness-150 backdrop-blur text-3xl font-bold origin-center rounded-xl -rotate-6 px-4 py-2 text-black">
+                Up Next!
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        </div>
+        <div className="absolute z-10 h-full w-full flex items-center justify-center">
+          <motion.svg
+            animate={{ opacity: game.state === "banned" ? 1 : 0 }}
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="w-36 h-36 text-fabl-pink"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"
+            />
+          </motion.svg>
+        </div>
+        <motion.div
+          className="absolute inset-0 rounded-lg bg-cover bg-center"
+          animate={{
+            filter:
+              game.state === "avaliable" || game.state === "next"
+                ? "grayscale(0) brightness(100%)"
+                : game.state === "banned"
+                ? "grayscale(100%)"
+                : "grayscale(75%) brightness(25%)",
+          }}
+          style={{
+            backgroundImage: `url('https://sendou.ink/static-assets/img/stages/${
+              maps.indexOf(game.map) - 1
+            }.png')`,
+          }}
+        >
+          <div className="absolute h-full w-full flex items-end justify-end">
+            <img
+              src={modeimgSources[game.mode]}
+              className="h-24 w-24 drop-shadow translate-x-8 translate-y-8"
+            />
+          </div>
+        </motion.div>
+        {winner && (
+          <div className="absolute inset-0 flex items-center justify-center p-4 text-center text-3xl font-medium">
+            <FadeText key={winner}>{winner}</FadeText>
+          </div>
+        )}
+      </div>
+    </Section>
   )
 }
 

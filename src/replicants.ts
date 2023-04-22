@@ -67,6 +67,16 @@ export const useCurrentTeams = () =>
     },
   ])
 
+export const useFablFinals = () =>
+  useReplicant(
+    "cq-dashboard.fablFinals",
+    Array.from({ length: 16 }).map((v, i) => ({
+      map: null,
+      mode: null,
+      state: "avaliable",
+    }))
+  )
+
 export const useLoadedData = () =>
   useReplicant("cq-dashboard.loadedData", {
     rounds: {},
