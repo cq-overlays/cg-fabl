@@ -9,7 +9,6 @@ import fablSz from "./fablmode-sz.png"
 import fablTc from "./fablmode-tc.png"
 import fablRm from "./fablmode-rm.png"
 import fablCb from "./fablmode-cb.png"
-import banned from "./banned.png"
 import {
   useCurrentBlock,
   useCurrentBreakScreen,
