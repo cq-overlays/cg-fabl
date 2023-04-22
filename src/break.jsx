@@ -333,7 +333,7 @@ const FinalsGame = ({ game, teams, maps }) => {
           className="absolute inset-0 rounded-lg bg-cover bg-center"
           animate={{
             filter:
-              game.state === "avaliable" || game.state === "next"
+              game.state === "available" || game.state === "next"
                 ? "grayscale(0) brightness(100%)"
                 : game.state === "banned"
                 ? "grayscale(100%)"

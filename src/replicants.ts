@@ -73,7 +73,7 @@ export const useFablFinals = () =>
     Array.from({ length: 16 }).map((v, i) => ({
       map: null,
       mode: null,
-      state: "avaliable",
+      state: "available",
     }))
   )
 
