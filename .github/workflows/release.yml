@@ -6,7 +6,7 @@ on:
       - "*"
 
 env:
-  DASHBOARD_VERSION: tags/v1.3.1-fabl-finals.1
+  DASHBOARD_VERSION: tags/v1.3.1-fabl-finals.2
 
 jobs:
   build:
