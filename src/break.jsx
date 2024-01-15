@@ -417,7 +417,7 @@ const Member = ({ right, member }) => (
     )}
   >
     <div className="grow font-medium truncate">
-      {member.splashtag.substring(0, member.splashtag.length - 5)}
+      {member.splashtag.split("#")[0]}
     </div>
     <div className="flex gap-2 shrink-0">
       {member.weapons.map((weapon) => (
@@ -679,7 +679,7 @@ const Row = ({ placement, entrant }) => {
       </div>
       <div className="flex-1 truncate flex items-center gap-3">
         <span>
-          {entrant.splashtag.substring(0, entrant.splashtag.length - 5)}
+          {entrant.splashtag.split("#")[0]}
         </span>
         <div className="flex shrink-0 items-center gap-1">
           {entrant.weapons.map((weapon) => (
